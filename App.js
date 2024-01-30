@@ -1,20 +1,33 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
-const task = require('./routes/tasks')
+const routeTask = require('./routes/routeTasks')
+const connectDB = require('./DB/connect')
 
+// app.use(express.json());
 
 app.get('/helo', (req, res) => {
-    res.status(200).json('helo')
+    res.send("helo")
 })
+ 
+app.use("/todo/v1/tasks", routeTask);
 
-app.use("/todo/v1/tasks", task);
 
+const start = async () => {
+    try {
+        await connectDB();
+        app.listen(PORT, () => {
+            console.log(`port run on ${PORT}`);
+            
+        });
+    }
+    catch (err) {
 
+    }
+}
 
-app.listen(PORT, () => {
-    console.log(`port run on ${PORT}`);
-})
+start();
+
 
 
 
