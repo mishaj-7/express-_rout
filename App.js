@@ -4,7 +4,7 @@ const PORT = 3000;
 const routeTask = require('./routes/routeTasks')
 const connectDB = require('./DB/connect')
 
-// app.use(express.json());
+ app.use(express.json());
 
 app.get('/helo', (req, res) => {
     res.send("helo")
