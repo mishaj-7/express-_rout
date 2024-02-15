@@ -1,28 +1,31 @@
 const express = require('express');
 const app = express();
-const PORT = 3000;
-const routeTask = require('./routes/routeTasks')
-const connectDB = require('./DB/connect')
+const PORT = 3001;
+ const routeTask = require('./routes/routeTasks')
+//import  {abcd as rotuter}  from './routes/routeTasks'
+const connectDB = require('./DB/connect');
+const notFound = require('./middlewares/not-found');
+require('dotenv').config();
+// console.log(process.env.DB_URL);
+const errorHandlerMiddleware = require('./middlewares/errorHandler');
+  app.use(express.json())
 
- app.use(express.json());
+app.use("/todo", routeTask);
 
-app.get('/helo', (req, res) => {
-    res.send("helo")
-})
- 
-app.use("/todo/v1/tasks", routeTask);
+app.use(notFound);
 
+app.use(errorHandlerMiddleware);
 
 const start = async () => {
     try {
-        await connectDB();
+         await connectDB(process.env.DB_URL)
         app.listen(PORT, () => {
             console.log(`port run on ${PORT}`);
             
         });
     }
     catch (err) {
-
+        console.log('DB_error');
     }
 }
 
