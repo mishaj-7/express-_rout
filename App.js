@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
-const PORT = 3001;
- const routeTask = require('./routes/routeTasks')
+
+const routeTask = require('./routes/routeTasks')
 //import  {abcd as rotuter}  from './routes/routeTasks'
 const connectDB = require('./DB/connect');
 const notFound = require('./middlewares/not-found');
 require('dotenv').config();
+const PORT = process.env.PORT || 8000;
 // console.log(process.env.DB_URL);
 const errorHandlerMiddleware = require('./middlewares/errorHandler');
   app.use(express.json())

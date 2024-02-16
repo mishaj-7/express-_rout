@@ -1,5 +1,7 @@
+const {createCustomError} = require('../errors/custom-errors')
 const Task = require('../models/models_task');
-const asycWarapper = require('../middlewares/async')
+const asycWarapper = require('../middlewares/async');
+
 
 
 
@@ -22,31 +24,29 @@ const getTask = asycWarapper (async (req, res, next) => {
         const { id: taskID } = req.params;
         const task = await Task.findOne({ _id: taskID });
         if (!task) {
-            const e = new Error("Not found");
-            e.status = 404;
-            return next(e);
+            return next(createCustomError(`no task with id ${taskID}`,404))
         }
     res.status(200).json({ task });
 });
 
-const updateTask = asycWarapper(async (req, res) => {
+const updateTask = asycWarapper(async (req, res, next) => {
   
     const { id: taskID } = req.params;
     const data = req.body;
     const updtTask = await Task.findOneAndUpdate({ _id: taskID }, data);
     if (!updtTask) {
-      return res.status(500).json("no data given id " + taskID);
+      return next(createCustomError(`not data found given id ${taskID}`))
     }
     res.status(200).json({updtTask});
 });
 
 
-const deleteTask = asycWarapper(async (req, res) => {
+const deleteTask = asycWarapper(async (req, res, next) => {
     
         const { id: taskID } = req.params;
         const dltTask = await Task.findOneAndDelete({ _id: taskID });
         if (!dltTask) {
-            res.status(500).json(`no data in given id ${taskID}`);
+             return next(createCustomError(`no task with id ${taskID}`))
         }
         res.status(200).json({ msg:  dltTask });
 
